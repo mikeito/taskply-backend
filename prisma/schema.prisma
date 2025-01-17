@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,23 +8,33 @@ datasource db {
 }
 
 model User {
-  id    Int     @default(autoincrement()) @id
-  email String  @unique
+  id       Int    @id @default(autoincrement())
+  email    String @unique
   password String
-  tasks Task[]
+  tasks    Task[]
 }
 
 model Task {
-  id        Int      @default(autoincrement()) @id
-  title     String
-  description   String?
-  status Status @default(PENDING)
-  deadline DateTime
-  creator    User?    @relation(fields: [creatorId], references: [id])
-  creatorId  Int?
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?
+  status      Status   @default(PENDING)
+  priority    Priorities @default(MEDIUM)
+  deadline    DateTime
+  createdAt   DateTime @default(now())
+  creator     User?    @relation(fields: [creatorId], references: [id])
+  creatorId   Int?
 }
 
 enum Status {
+  TODO
   PENDING
+  INREVIEW
   COMPLETED
+}
+
+enum Priorities {
+  LOW
+  MEDIUM
+  HIGH
 }
